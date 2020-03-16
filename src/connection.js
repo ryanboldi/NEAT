@@ -14,4 +14,10 @@ class Connection{
         this.enabled = enabled;
         this.innov_number = innov_number;
     }
+
+    //takes input node value, multiplies by weight, and adds it to the input sum of the output node
+    activate(){
+        this.out_node.incomingSignal += (this.in_node.value * this.weight)
+    }
+
 }

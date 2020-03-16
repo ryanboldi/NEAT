@@ -1,6 +1,17 @@
 //GLOBAL VARIABLES
 glob_innov = 0
 
+//specie variables
+excess_coefficient = 1;
+disjoint_coefficient = 1;
+
+//GA variables
+population = 100;
+
+//NEAT Variables
+someInputsDisc = true; // Whether or not to start with some inputs disconnected 
+
+
 //ACTIVATION FUNCTIONS
 //range should be [-1, 1]
 
@@ -17,3 +28,12 @@ step = (x) => {
     if (x == 0) return 0;
 };
 
+//initialize the population
+function init(){
+
+}
+
+//do one generation
+function doGen(){
+
+}
