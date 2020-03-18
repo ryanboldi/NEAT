@@ -4,10 +4,10 @@ class Node {
      * @param {String} type type of node this is i=input, o=output, h=hidden, b = bias.
      * @param {Function} activation function used to normalise the nodes value to between -1 and 1;
      */
-    constructor(type = 'i', activation = sigmoid) {
+    constructor(type = 'h', activation = sigmoid) {
         this.type = type;
         this.activation = activation;
-        this.value = (random() * 2) - 1; //all values initilised at random between (-1 and 1)
+        this.value = (Math.random() * 2) - 1; //all values initilised at random between (-1 and 1)
 
         this.incomingSignal = 0; //sum before activation
 

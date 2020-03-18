@@ -19,5 +19,4 @@ class Connection{
     activate(){
         this.out_node.incomingSignal += (this.in_node.value * this.weight)
     }
-
 }

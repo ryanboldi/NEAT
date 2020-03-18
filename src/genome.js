@@ -4,20 +4,37 @@ class Genome {
         this.connections = [] // array of connections between those nodes
 
         for (let i = 0; i < inputs; i++) {
-            this.nodes.push(new Node(type = 'i'))
+            this.nodes.push(new Node('i'))
         }
         //add one bias to input layer, always activated (1)
-        this.nodes.push(new Node(type = 'b'))
+        this.nodes.push(new Node('b'))
         for (let i = 0; i < outputs; i++) {
-            this.nodes.push(new Node(type = 'o'))
+            this.nodes.push(new Node('o'))
         }
 
-        //all genomes should be fully connected on initilisation
+        //all genomes should be randomly connected on initilisation
         //that means every input should be connected to an output.
+        let possible_connections = []; // every possible connection
 
-
+        for (let i = 0; i < inputs + 1; i++) {
+            for (let j = 0; j < outputs; j++) {
+                possible_connections.push([i, j]);
+            }
+        }
+        console.log(possible_connections)
+        //0 is input 0 to output 0, 1: i1 -> o0, 2:i2->o0, 3:i0 -> o1
+        let connecs = Math.floor(Math.random() * (possible_connections.length + 1)); // how many connections we want to start with
+        console.log(connecs);
+        let rand_connecs = [];
+        while (rand_connecs.length < connecs) {
+            //choose random connection from possible connections
+            let rand_index = Math.floor((Math.random() * possible_connections.length))
+            console.log(rand_index)
+            rand_connecs.push(possible_connections[rand_index]);
+            possible_connections.splice(rand_index,1);
+        }
+        console.log(rand_connecs);
     }
-
 
     //mutates the genome by adding a random connection
     //a single new connection gene with a random weight is added connectng two previously unconnected nodes
