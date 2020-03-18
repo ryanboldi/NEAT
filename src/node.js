@@ -4,7 +4,8 @@ class Node {
      * @param {String} type type of node this is i=input, o=output, h=hidden, b = bias.
      * @param {Function} activation function used to normalise the nodes value to between -1 and 1;
      */
-    constructor(type = 'h', activation = sigmoid) {
+    constructor(num,type = 'h', activation = sigmoid) {
+        this.num = num;
         this.type = type;
         this.activation = activation;
         this.value = (Math.random() * 2) - 1; //all values initilised at random between (-1 and 1)

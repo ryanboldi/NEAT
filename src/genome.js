@@ -1,15 +1,18 @@
 class Genome {
     constructor(inputs, outputs) {
+        this.inputs = inputs;
+        this.ouputs = outputs;
+
         this.nodes = [] //array of nodes
         this.connections = [] // array of connections between those nodes
 
         for (let i = 0; i < inputs; i++) {
-            this.nodes.push(new Node('i'))
+            this.nodes.push(new Node(i, 'i'))
         }
         //add one bias to input layer, always activated (1)
-        this.nodes.push(new Node('b'))
+        this.nodes.push(new Node(inputs, 'b'))
         for (let i = 0; i < outputs; i++) {
-            this.nodes.push(new Node('o'))
+            this.nodes.push(new Node(inputs + i + 1, 'o'))
         }
 
         //all genomes should be randomly connected on initilisation
@@ -24,16 +27,15 @@ class Genome {
         console.log(possible_connections)
         //0 is input 0 to output 0, 1: i1 -> o0, 2:i2->o0, 3:i0 -> o1
         let connecs = Math.floor(Math.random() * (possible_connections.length + 1)); // how many connections we want to start with
-        console.log(connecs);
         let rand_connecs = [];
         while (rand_connecs.length < connecs) {
             //choose random connection from possible connections
             let rand_index = Math.floor((Math.random() * possible_connections.length))
-            console.log(rand_index)
             rand_connecs.push(possible_connections[rand_index]);
-            possible_connections.splice(rand_index,1);
+            possible_connections.splice(rand_index, 1);
         }
-        console.log(rand_connecs);
+        //create new connecttions from these inputs to outputs.
+        console.log(rand_connecs)
     }
 
     //mutates the genome by adding a random connection
@@ -80,7 +82,8 @@ class Genome {
         }
     }
 
-    copy() {
-
+    //orders nodes by their numbers
+    order_nodes(){
+        this.nodes.sort((a,b) => a.num - b.num);
     }
 }
