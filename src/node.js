@@ -20,6 +20,7 @@ class Node {
     //adds up incoming signal, and sets value to the activated value
     engage(){
         this.value = this.activation(this.incomingSignal);
+        this.incomingSignal = 0;
     }
 
     clone() {

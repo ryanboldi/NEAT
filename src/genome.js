@@ -36,6 +36,10 @@ class Genome {
         }
         //create new connecttions from these inputs to outputs.
         console.log(rand_connecs)
+        for(let i = 0 ; i < rand_connecs.length; i++){
+            this.connections.push(new Connection(rand_connecs[i][0],rand_connecs[i][1]));
+        }
+        console.log(this.connections)
     }
 
     //mutates the genome by adding a random connection
@@ -60,11 +64,12 @@ class Genome {
      * @param {Array} input array with each input. normalised between -1 and 1. [-0.7 ,0.8, 3]
      */
     feedforward(input) {
+        this.order_nodes();
         inputindex = 0 //help me keep track of how many inputs weve assigned already
         //for i in connections
         //activate each connection (node1 -> c1 -> node2)
         for (let i = 0; i < this.connections.length; i++) {
-            this.connections[i].activate();
+            this.nodes[this.connections[i].out_node].incomingSignal += (this.nodes[this.connections[i].in_node] * this.connections[i].weight)
         }
 
         //then, we total all nodes and apply activation function

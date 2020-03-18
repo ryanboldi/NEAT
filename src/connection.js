@@ -7,12 +7,12 @@ class Connection{
      * @param {Boolean} enabled Whether this connection is enabled or not
      * @param {Number} innov_number Number to give us evoluntionary history of the genome
      */
-    constructor(in_node, out_node, weight, enabled, innov_number){
+    constructor(in_node, out_node, weight = 1, enabled = true){
         this.in_node = in_node;
         this.out_node = out_node;
         this.weight = weight;
         this.enabled = enabled;
-        this.innov_number = innov_number;
+        //this.innov_number = innov_number;
     }
 
     //takes input node value, multiplies by weight, and adds it to the input sum of the output node
