@@ -12,7 +12,6 @@ class Genome {
         //add one bias to input layer, always activated (1)
         this.nodes.push(new Node(inputs, 'b'))
         for (let i = 0; i < this.outputs; i++) {
-            console.log(`adding output #${i}`)
             this.nodes.push(new Node(inputs + i + 1, 'o'));
         }
 
@@ -43,13 +42,14 @@ class Genome {
     //mutates the genome by adding a random connection
     //a single new connection gene with a random weight is added connectng two previously unconnected nodes
     mut_add_connection() {
-        let possible = []
+        let possible = [];
         //check for connections that don't already exist
         for (let i = 0; i < this.nodes.length; i++){
-            for (let j = this.inputs.length -1 ; j < this.nodes.length; j++){//start at inputs because we do not want connections TO inputs
+            for (let j = this.inputs + 1; j < this.nodes.length; j++){//start at inputs because we do not want connections TO inputs
                 //check if there is a connection from i to j, if not add it to possible connections array
-                connectionExists = false;
+                let connectionExists = false;
                 for (let k = 0; k < this.connections.length; k++){
+                    //console.log(`k=${k}, this.connections[k].in_node =${this.connections[k].in_node}, this.nodes[i].num=${this.nodes[i].num}`)
                     if (this.connections[k].in_node == this.nodes[i].num && this.connections[k].out_node == this.nodes[j].num){
                         connectionExists = true;
                     }
