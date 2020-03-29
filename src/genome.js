@@ -43,7 +43,26 @@ class Genome {
     //mutates the genome by adding a random connection
     //a single new connection gene with a random weight is added connectng two previously unconnected nodes
     mut_add_connection() {
-
+        let possible = []
+        //check for connections that don't already exist
+        for (let i = 0; i < this.nodes.length; i++){
+            for (let j = this.inputs.length -1 ; j < this.nodes.length; j++){//start at inputs because we do not want connections TO inputs
+                //check if there is a connection from i to j, if not add it to possible connections array
+                connectionExists = false;
+                for (let k = 0; k < this.connections.length; k++){
+                    if (this.connections[k].in_node == this.nodes[i].num && this.connections[k].out_node == this.nodes[j].num){
+                        connectionExists = true;
+                    }
+                }
+                if (!connectionExists){
+                    let NEW = [];
+                    NEW.push(i);
+                    NEW.push(j);
+                    possible.push(NEW);//pushes this unused connection to possible connections
+                }
+            }
+        }
+        console.log(possible);
     }
 
     //mutates the genome by adding a new node
