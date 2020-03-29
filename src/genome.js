@@ -35,26 +35,26 @@ class Genome {
         }
         //create new connections from these inputs to outputs.
         for (let i = 0; i < rand_connecs.length; i++) {
-            this.connections.push(new Connection(rand_connecs[i][0], rand_connecs[i][1]));
+            this.connections.push(new Connection(rand_connecs[i][0], rand_connecs[i][1], true));
         }
     }
 
     //mutates the genome by adding a random connection
-    //a single new connection gene with a random weight is added connectng two previously unconnected nodes
+    //a single new connection gene with a random weight is added connecting two previously unconnected nodes
     mut_add_connection() {
         let possible = [];
         //check for connections that don't already exist
-        for (let i = 0; i < this.nodes.length; i++){
-            for (let j = this.inputs + 1; j < this.nodes.length; j++){//start at inputs because we do not want connections TO inputs
+        for (let i = 0; i < this.nodes.length; i++) {
+            for (let j = this.inputs + 1; j < this.nodes.length; j++) {//start at inputs because we do not want connections TO inputs
                 //check if there is a connection from i to j, if not add it to possible connections array
                 let connectionExists = false;
-                for (let k = 0; k < this.connections.length; k++){
+                for (let k = 0; k < this.connections.length; k++) {
                     //console.log(`k=${k}, this.connections[k].in_node =${this.connections[k].in_node}, this.nodes[i].num=${this.nodes[i].num}`)
-                    if (this.connections[k].in_node == this.nodes[i].num && this.connections[k].out_node == this.nodes[j].num){
+                    if (this.connections[k].in_node == this.nodes[i].num && this.connections[k].out_node == this.nodes[j].num) {
                         connectionExists = true;
                     }
                 }
-                if (!connectionExists){
+                if (!connectionExists) {
                     let NEW = [];
                     NEW.push(i);
                     NEW.push(j);
@@ -62,7 +62,13 @@ class Genome {
                 }
             }
         }
-        console.log(possible);
+        //chose a random connection
+        //console.log(possible);
+        if (possible.length !== 0) {
+            let selected = possible[Math.floor(Math.random() * possible.length)]
+            this.connections.push(new Connection(selected[0], selected[1], true));//makes new random weight
+            //console.log(`Mutated and added connection (${selected[0]}->${selected[1]})`);
+        }
     }
 
     //mutates the genome by adding a new node
