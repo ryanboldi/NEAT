@@ -149,6 +149,8 @@ class Genome {
     }
 
     Draw() {
+        //TODO -> DEAL WITH RECCURENT SOMEHOW
+        //TODO -> FIX GLITCHINESS WHEN THERES LARG NUMBERS OF NODES
         background(255);
         
         let weightStrength = 4; //how much weight changes the thickness of the lines
