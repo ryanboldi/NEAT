@@ -28,6 +28,11 @@ step = (x) => {
     if (x == 0) return 0;
 };
 
+function normalise(val, minVal, maxVal, newMin, newMax){
+    return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
+};
+
+
 //initialize the population
 function init(){
 

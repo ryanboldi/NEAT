@@ -41,7 +41,7 @@ class Genome {
 
     //mutates the genome by adding a random connection
     //a single new connection gene with a random weight is added connecting two previously unconnected nodes
-    mut_add_connection() {
+    mu_add_connection() {
         let possible = [];
         //check for connections that don't already exist
         for (let i = 0; i < this.nodes.length; i++) {
@@ -150,6 +150,8 @@ class Genome {
 
     Draw() {
         background(255);
+        
+        let weightStrength = 4; //how much weight changes the thickness of the lines
 
         let rad = 30;
 
@@ -157,27 +159,62 @@ class Genome {
         let outputX = width - 40;
         let hiddenX = ((outputX - inputX) / 2) + inputX;
 
-        let inputSep = Math.round(height / (this.inputs + 1));
+        let inputSep = Math.round(height / (this.inputs + 2));
         let hiddenSep = Math.round(height / (this.nodes.length - (1 + this.outputs + this.inputs) + 1));
         let outputSep = Math.round(height / (this.outputs + 1));
 
         noFill();
         stroke(0);
 
+        let nodePos = [];//stores all node positions as an array [num, x, y]
         //draw inputs
-        for (let i = 0; i < this.inputs; i++) {
+        for (let i = 0; i < this.inputs + 1; i++) {
             ellipse(inputX, inputSep + (i * inputSep), rad, rad);
+            nodePos.push([i, inputX, inputSep + (i * inputSep)]);
         }
 
         //draw outputs
         for (let i = 0; i < this.outputs; i++) {
             ellipse(outputX, outputSep + (i * outputSep), rad, rad);
+            nodePos.push([(this.nodes.length - this.outputs) + i, outputX, outputSep + (i * outputSep)]);
         }
 
         //draw hiddens 
         //this is ugly but oh well
         for (let i = 0; i < (this.nodes.length - (1 + this.outputs + this.inputs)); i++) {
             ellipse(hiddenX, hiddenSep + (i * hiddenSep), rad, rad);
+            nodePos.push([(this.inputs + 1) + i, outputX, outputSep + (i * outputSep)]);
         }
+
+        //draw connections
+        for (let i = 0; i < this.connections.length; i ++){
+            let IN = this.connections[i].in_node;
+            let OUT = this.connections[i].out_node;
+            let W = this.connections[i].weight;
+
+            // red if neg, blue if pos, thickness is weight
+            if(W < 0) stroke(255,0,0);
+            if(W > 0) stroke(255,0,0);
+            if(W == 0 || (this.connections.enabled == false)) stroke(120,120,120);
+
+            //sigmoid weight so it's between 0 and 1;
+            let sigW = sigmoid(W);
+            strokeWeight(sigW * weightStrength);
+
+            //draw line from IN's x coord, IN's x coord -> OUT's x,y
+            let fromX, fromY, toX, toY;
+            for (let j = 0; j < nodePos.length; j++){
+                if (nodePos[j][0] == IN){
+                    fromX = nodePos[j][1];
+                    fromY = nodePos[j][2];
+                } else if (nodePos[j][0] == OUT){
+                    toX = nodePos[j][1];
+                    toY = nodePos[j][2];
+                }
+            }
+            //draw the weight
+            line(fromX, fromY, toX, toY);
+        }
+
     }
 }
