@@ -73,12 +73,31 @@ class Genome {
 
     //mutates the genome by adding a new node
     //an existing connection is split and the new node placed where the old connection used to be
-    //old connection is disabled an two new connections are added to the genome. 
-    //new conneciton leadig into the new node recieves a weight of 1. 
+    //old connection is disabled and two new connections are added to the genome. 
+    //new conneciton leading into the new node recieves a weight of 1. 
     // new connection leading out recieves the same weight as the old connection
     //this minimizes the affect of the node addition mutation
     mu_add_node() {
+        //select random connection to break
+        if (this.connections.length == 0) return;
+        let chosenConIndex = Math.floor(Math.random() * this.connections.length);
+        let chosenCon = this.connections[chosenConIndex];
+        let c_in = chosenCon.in_node;
+        let c_out = chosenCon.out_node;
+        let c_w = chosenCon.weight;
+        let n = this.nodes.length;//num for this new node
 
+
+        //disables old connection
+        this.connections[chosenConIndex].enabled = false;
+
+        //adds new node
+        this.nodes.push(new Node(n));
+
+        //adds connection from starting point of chosen connection to the new node
+        this.connections.push(new Connection(c_in, n, false, 1));
+        //adds connection from new node to ending point of chosen connection
+        this.connections.push(new Connection(n, c_out, false, c_w));
     }
 
     //feeds info down ONE CONNECTION.
@@ -127,5 +146,38 @@ class Genome {
     //orders nodes by their numbers
     order_nodes() {
         this.nodes.sort((a, b) => a.num - b.num);
+    }
+
+    Draw() {
+        background(255);
+
+        let rad = 30;
+
+        let inputX = 40;
+        let outputX = width - 40;
+        let hiddenX = ((outputX - inputX) / 2) + inputX;
+
+        let inputSep = Math.round(height / (this.inputs + 1));
+        let hiddenSep = Math.round(height / (this.nodes.length - (1 + this.outputs + this.inputs) + 1));
+        let outputSep = Math.round(height / (this.outputs + 1));
+
+        noFill();
+        stroke(0);
+
+        //draw inputs
+        for (let i = 0; i < this.inputs; i++) {
+            ellipse(inputX, inputSep + (i * inputSep), rad, rad);
+        }
+
+        //draw outputs
+        for (let i = 0; i < this.outputs; i++) {
+            ellipse(outputX, outputSep + (i * outputSep), rad, rad);
+        }
+
+        //draw hiddens 
+        //this is ugly but oh well
+        for (let i = 0; i < (this.nodes.length - (1 + this.outputs + this.inputs)); i++) {
+            ellipse(hiddenX, hiddenSep + (i * hiddenSep), rad, rad);
+        }
     }
 }
