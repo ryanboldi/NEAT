@@ -1,5 +1,9 @@
 class Genome {
-    constructor(inputs, outputs) {
+    constructor(inputs, outputs, empty) {
+        if (empty){
+            return;
+        }
+
         this.inputs = inputs;
         this.outputs = outputs;
 
