@@ -35,7 +35,11 @@ class Genome {
         }
         //create new connections from these inputs to outputs.
         for (let i = 0; i < rand_connecs.length; i++) {
-            this.connections.push(new Connection(rand_connecs[i][0], rand_connecs[i][1], true));
+            //let newCon = new Connection(rand_connecs[i][0], rand_connecs[i][1], true)
+            //check if connection's equivalent connection history exists
+            //if yes, find it's innovation number and set that as it's own
+            //if no, add it and increment innovation number
+            this.add_connection(rand_connecs[i][0],rand_connecs[i][1]);
         }
     }
 
@@ -66,7 +70,8 @@ class Genome {
         //console.log(possible);
         if (possible.length !== 0) {
             let selected = possible[Math.floor(Math.random() * possible.length)]
-            this.connections.push(new Connection(selected[0], selected[1], true));//makes new random weight
+            //this.connections.push(new Connection(selected[0], selected[1], true));//makes new random weight
+            this.add_connection(selected[0],selected[1]);
             //console.log(`Mutated and added connection (${selected[0]}->${selected[1]})`);
         }
     }
@@ -95,9 +100,11 @@ class Genome {
         this.nodes.push(new Node(n));
 
         //adds connection from starting point of chosen connection to the new node
-        this.connections.push(new Connection(c_in, n, false, 1));
+        //this.connections.push(new Connection(c_in, n, false, 1));
+        this.add_connection(c_in, n, 1);
         //adds connection from new node to ending point of chosen connection
-        this.connections.push(new Connection(n, c_out, false, c_w));
+        //this.connections.push(new Connection(n, c_out, false, c_w));
+        this.add_connection(n, c_out, c_w);
     }
 
     //feeds info down ONE CONNECTION.
@@ -148,11 +155,44 @@ class Genome {
         this.nodes.sort((a, b) => a.num - b.num);
     }
 
+    //adds a connection to this.connections, with correct innovation number
+    add_connection(in_node, out_node, weight = NaN, enabled = true) {
+        //if innovations are empty, just add this new innovation with no 1.
+        let innum = -1; //invalid
+        if (innovations.length == 0) {
+            innovations.push(new History(in_node, out_node, glob_innov))
+            innum = glob_innov;
+            glob_innov += 1;
+        }
+        else {
+            //if it isnt empty, check if this history exists already. 
+            let exists = false;
+            for (let i = 0; i < innovations.length; i++) {
+                if (innovations[i].equals(in_node, out_node)) {
+                    exists = true;
+                    innum = innovations[i].inno_num;
+                }
+            }
+            if (!exists) {
+                //assign new innov number, add to innovations
+                innovations.push(new History(in_node, out_node, glob_innov))
+                innum = glob_innov;
+                glob_innov += 1;
+            }
+        }
+        if (weight == NaN) {
+            this.connections.push(new Connection(in_node, out_node, true, 1, enabled, innum));
+        }
+        else if (weight !== NaN) {
+            this.connections.push(new Connection(in_node, out_node, false, weight, enabled, innum));
+        }
+    }
+
     Draw() {
         //TODO -> DEAL WITH RECCURENT SOMEHOW
         //TODO -> FIX GLITCHINESS WHEN THERES LARG NUMBERS OF NODES
         background(255);
-        
+
         let weightStrength = 4; //how much weight changes the thickness of the lines
 
         let rad = 30;
@@ -189,15 +229,15 @@ class Genome {
         }
 
         //draw connections
-        for (let i = 0; i < this.connections.length; i ++){
+        for (let i = 0; i < this.connections.length; i++) {
             let IN = this.connections[i].in_node;
             let OUT = this.connections[i].out_node;
             let W = this.connections[i].weight;
 
             // red if neg, blue if pos, thickness is weight
-            if(W < 0) stroke(255,0,0);
-            if(W > 0) stroke(255,0,0);
-            if(W == 0 || (this.connections.enabled == false)) stroke(120,120,120);
+            if (W < 0) stroke(255, 0, 0);
+            if (W > 0) stroke(255, 0, 0);
+            if (W == 0 || (this.connections.enabled == false)) stroke(120, 120, 120);
 
             //sigmoid weight so it's between 0 and 1;
             let sigW = sigmoid(W);
@@ -205,11 +245,11 @@ class Genome {
 
             //draw line from IN's x coord, IN's x coord -> OUT's x,y
             let fromX, fromY, toX, toY;
-            for (let j = 0; j < nodePos.length; j++){
-                if (nodePos[j][0] == IN){
+            for (let j = 0; j < nodePos.length; j++) {
+                if (nodePos[j][0] == IN) {
                     fromX = nodePos[j][1];
                     fromY = nodePos[j][2];
-                } else if (nodePos[j][0] == OUT){
+                } else if (nodePos[j][0] == OUT) {
                     toX = nodePos[j][1];
                     toY = nodePos[j][2];
                 }

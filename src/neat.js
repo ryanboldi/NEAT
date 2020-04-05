@@ -1,5 +1,6 @@
 //GLOBAL VARIABLES
-glob_innov = 0
+glob_innov = 1
+innovations = []//array of historyconnections to store the innovations of this current generation
 
 //specie variables
 excess_coefficient = 1;
