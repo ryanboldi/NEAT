@@ -17,5 +17,15 @@ class Population {
             this.genomes = []
             console.error("error in population instantiation: genomes not instance of array");
         }
+        this.species = []
+    }
+
+    /**speciates the entire population's genomes and stores them in the population's species */
+    speciate() {
+        //if species is empty, add first dude to new species
+        if (this.species.length == 0 && this.genomes.length !== 0) {
+            this.species.push(new Species(this.genomes[0]))
+        }
+        //if it isnt, check if distance from any species is less than the threshold
     }
 }

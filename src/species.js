@@ -1,4 +1,4 @@
-class Specie{
+class Species{
     /**
      * 
      * @param {Genome} g genome to be the initial genome in this species
@@ -13,7 +13,7 @@ class Specie{
         if (g){
             this.genomes = g;
             this.champ = g;
-            this.representative; // = g.copy
+            this.representative = g; // = g.copy
             this.bestFitness = g.fitness;
         }
     }
