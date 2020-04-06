@@ -1,9 +1,5 @@
 class Genome {
     constructor(inputs, outputs, empty) {
-        if (empty){
-            return;
-        }
-
         this.inputs = inputs;
         this.outputs = outputs;
 
@@ -18,6 +14,10 @@ class Genome {
         for (let i = 0; i < this.outputs; i++) {
             this.nodes.push(new Node(inputs + i + 1, 'o'));
         }
+
+        if (empty) {
+            return;
+        }//if the genome is empty, we don't wanna add any hidden nodes or connections.
 
         //all genomes should be randomly connected on initilisation
         //that means every input should be connected to an output.
@@ -43,7 +43,7 @@ class Genome {
             //check if connection's equivalent connection history exists
             //if yes, find it's innovation number and set that as it's own
             //if no, add it and increment innovation number
-            this.add_connection(rand_connecs[i][0],rand_connecs[i][1]);
+            this.add_connection(rand_connecs[i][0], rand_connecs[i][1]);
         }
     }
 
@@ -75,7 +75,7 @@ class Genome {
         if (possible.length !== 0) {
             let selected = possible[Math.floor(Math.random() * possible.length)]
             //this.connections.push(new Connection(selected[0], selected[1], true));//makes new random weight
-            this.add_connection(selected[0],selected[1]);
+            this.add_connection(selected[0], selected[1]);
             //console.log(`Mutated and added connection (${selected[0]}->${selected[1]})`);
         }
     }
@@ -184,10 +184,10 @@ class Genome {
                 glob_innov += 1;
             }
         }
-        if (weight == NaN) {
+        if (isNaN(weight)) {
             this.connections.push(new Connection(in_node, out_node, true, 1, enabled, innum));
         }
-        else if (weight !== NaN) {
+        else if (!isNaN(weight)) {
             this.connections.push(new Connection(in_node, out_node, false, weight, enabled, innum));
         }
     }
