@@ -192,6 +192,38 @@ class Genome {
         }
     }
 
+
+    /**Mutates this genome based on probabilities defined in neat.js */
+    Mutate() {
+        /*weight_mut_rate = 0.8;
+        uniform_perturbance = 0.9; // if weights mutated, 90% chance they are uniformly perturbed. 10% they are assigned new random value
+        disable_inherited_disabled_gene = 0.75;
+        crossover_no_mut = 0.25;
+        interspecies_mate_rate = 0.001;
+        node_add_rate = 0.03;
+        connec_add_rate = 0.05;
+        large_pop_connec_rate = 0.3;*/
+
+        //add new node
+        if (Math.random() < node_add_rate) this.mu_add_node();
+
+        //add new connection
+        if (Math.random() < connec_add_rate) this.mu_add_connection();
+
+        for (let i = 0; i < this.connections.length; i++) {
+            if (Math.random() < weight_mut_rate) {
+                if (Math.random() < uniform_perturbance) {
+                    //add or subtract 10% from weight
+                    this.connections[i].weight += ((Math.random() < 0.5) ? (-0.1 * this.connections[i].weight) : (0.1 * this.connections[i].weight));
+                }
+                else {
+                    //new random weight
+                    this.connections[i].weight = (Math.random() * 2) - 1;
+                }
+            }
+        }
+    }
+
     Draw() {
         //TODO -> DEAL WITH RECCURENT SOMEHOW
         //TODO -> FIX GLITCHINESS WHEN THERES LARG NUMBERS OF NODES
