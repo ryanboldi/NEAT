@@ -192,9 +192,9 @@ function distance(genome1, genome2) {
         }
     }
 
-    console.log(excess_num);
-    console.log(disjoint_num);
-    console.log(average_w_difference);
+    //console.log(excess_num);
+    //console.log(disjoint_num);
+    //console.log(average_w_difference);
     //biggestSize stores the size of the largest genome of the two
     let biggestSize = ((genome1.connections.length < genome2.connections.length) ? genome2.connections.length : genome1.connections.length);
     let N;
