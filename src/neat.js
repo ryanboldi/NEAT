@@ -100,26 +100,45 @@ function crossover(parent1, parent2) {
     // if p2 has a matching gene, then 50% chance to select it
     //p1 has higher fitness
     for (let i = 0; i < p1Genes.length; i++) {
-        if (p1Genes[i] !== 0 && p2Genes[i] !== 0) {
-            ///matching gene exists, chose random gene and append to child. 
-            if (Math.random() > 0.5) {
-                child.connections.push(p1Genes[i])
-            } else {
-                child.connections.push(p2Genes[i])
+        //75% chance to reenable a disabled gene, so ill just enable ALL genes cause the ones that arnt disabled are already enabled.
+        let forceEnable = (Math.random() > disable_inherited_disabled_gene);
+
+        if (forceEnable) {//15% chance, we enable this gene no matter what 
+            if (p1Genes[i] !== 0 && p2Genes[i] !== 0) {
+                ///matching gene exists, chose random gene and append to child. 
+                if (Math.random() > 0.5) {
+                    child.connections.push(p1Genes[i].enable())
+                } else {
+                    child.connections.push(p2Genes[i].enable())
+                }
             }
-        }
-        else if (p1Genes[i] !== 0 && p2Genes[i] == 0) {
-            //p1 has gene that p2 doesnt,
-            //add it to child
-            child.connections.push(p1Genes[i])
-        }
-        else if (p1Genes[i] == 0 && p2Genes[i] !== 0) {
-            //p2 has gene that p1 doesn't 
-            //do nothing
-        }
-        else {
-            //both parents don't have gene
-            //do nothing
+            else if (p1Genes[i] !== 0 && p2Genes[i] == 0) {
+                //p1 has gene that p2 doesnt,
+                //add it to child
+                child.connections.push(p1Genes[i].enable())
+            }
+            else if (p1Genes[i] == 0 && p2Genes[i] !== 0) {
+                //p2 has gene that p1 doesn't 
+                //do nothing
+            }
+            else {
+                //both parents don't have gene
+                //do nothing
+            }
+        } else { //75% change we don't enable it, keep it disabled
+            if (p1Genes[i] !== 0 && p2Genes[i] !== 0) {
+                ///matching gene exists, chose random gene and append to child. 
+                if (Math.random() > 0.5) {
+                    child.connections.push(p1Genes[i])
+                } else {
+                    child.connections.push(p2Genes[i])
+                }
+            }
+            else if (p1Genes[i] !== 0 && p2Genes[i] == 0) {
+                //p1 has gene that p2 doesnt,
+                //add it to child
+                child.connections.push(p1Genes[i])
+            }
         }
     }
 
