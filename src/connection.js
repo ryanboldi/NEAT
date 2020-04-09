@@ -19,7 +19,12 @@ class Connection {
             this.weight = (Math.random() * 2) - 1; //random between -1 and 1
         }
     }
-    enable(){
+    enable() {
         this.enabled = true;
+    }
+    toggle() {
+        if (this.enabled) {
+            this.enabled = false;
+        } else this.enabled = true;
     }
 }
