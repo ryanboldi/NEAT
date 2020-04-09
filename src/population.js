@@ -42,4 +42,46 @@ class Population {
 
         console.log(this.species);
     }
+
+    //makes next generation's population based on fitness
+    makeNext() {
+        //TODO
+
+        //FITNESS SHARING Offspring = (AverageSpeciesFitness / Total_of_AverageSpeciesFitnesss) * PopulationSize
+        let newPop = []
+        let mutaters = []; //genomes to be mutated but not crossed over
+        let parents = []; //genomes to be crossed over and then mutated
+
+        this.speciate();
+        this.interspecies = []; //genomes that have been selected to mate with other species. they will be inserted into a random species' mating pool
+
+        let tot_avg_fitness = 0;
+        for (let i = 0; i < this.species.length; i++) {
+            tot_avg_fitness += this.species.averageFitness();
+        }
+
+        for (let i = 0; i < this.species.length; i++) {
+            let offspring = Math.floor((this.species[i].averageFitness / tot_avg_fitness) * population); //how many offspring this species is allowed. 
+            let matingPool = [];//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
+
+            //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
+            
+
+
+        }
+
+
+        for (let i = 0; i < this.genomes.length; i++) {
+            if (Math.random() < no_cross) {
+                mutaters.push(this.genomes[i]);
+            } else {
+                parents.push(this.genomes[i]);
+            }//assigns the genomes to either the mating pool or the mutation pool
+        }
+
+
+
+
+
+    }
 }
