@@ -221,6 +221,9 @@ class Genome {
                     this.connections[i].weight = (Math.random() * 2) - 1;
                 }
             }
+            if (Math.random() < mut_toggle_enable_prob){
+                this.connections[i].toggle();
+            }
         }
     }
 
