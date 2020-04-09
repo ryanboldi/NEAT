@@ -8,6 +8,7 @@ class Species {
         this.champ;
         this.representative;
         this.bestFitness = 0;
+        this.averageFitness = 0;
 
         //if g given
         if (g) {
@@ -32,5 +33,14 @@ class Species {
      */
     isComp(genome) {
         return (this.getDist(genome) <= distance_threshold);
+    }
+
+    averageFitness() {
+        let totFit = 0;
+        this.genomes.forEach(g => {
+            totFit += g.fitness
+        });
+        this.averageFitness = totFit/(this.genomes.length);
+        return this.averageFitness;
     }
 }
