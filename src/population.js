@@ -22,7 +22,7 @@ class Population {
     speciate() {
         this.species = []; //reset species
         //if species is empty, add first dude to new species
-        this.species.push(new Species(this.genomes[0]))
+        this.species.push(new Species(this.genomes[0]));
 
         //check if distance from any species is less than the threshold for every other
         for (let i = 1; i < this.genomes.length; i++) {
@@ -31,6 +31,7 @@ class Population {
                 if (this.species[j].isComp(this.genomes[i])) {
                     found = true;
                     this.species[j].genomes.push(this.genomes[i]);
+                    break;
                 }
             }
             //if we didnt find a species for little jimmy
@@ -39,14 +40,11 @@ class Population {
                 this.species.push(new Species(this.genomes[i]))
             }
         }
-
-        console.log(this.species);
+        //console.log(this.species);
     }
 
     //makes next generation's population based on fitness
     makeNext() {
-        //TODO
-
         //FITNESS SHARING Offspring = (AverageSpeciesFitness / Total_of_AverageSpeciesFitnesss) * PopulationSize
         let newPop = []
         let mutaters = []; //genomes to be mutated but not crossed over
@@ -57,17 +55,18 @@ class Population {
 
         let tot_avg_fitness = 0;
         for (let i = 0; i < this.species.length; i++) {
-            tot_avg_fitness += this.species.averageFitness();
+            tot_avg_fitness += this.species[i].getAveFit();
         }
 
+        console.log(this.species);
+
         for (let i = 0; i < this.species.length; i++) {
-            let offspring = Math.floor((this.species[i].averageFitness / tot_avg_fitness) * population); //how many offspring this species is allowed. 
+            let offspring = ((this.species[i].averageFitness / tot_avg_fitness) * population); //how many offspring this species is allowed. 
             let matingPool = [];//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
 
             //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
-            
-
-
+            let speciesSelection; //which creatures have been selected to be part of the mating pool
+            speciesSelection = roulette(this.species[i], offspring);
         }
 
 
@@ -78,10 +77,5 @@ class Population {
                 parents.push(this.genomes[i]);
             }//assigns the genomes to either the mating pool or the mutation pool
         }
-
-
-
-
-
     }
 }
