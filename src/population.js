@@ -65,17 +65,18 @@ class Population {
             let matingPool = [];//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
 
             //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
-            let speciesSelection; //which creatures have been selected to be part of the mating pool
-            speciesSelection = roulette(this.species[i], offspring);
+            //which creatures have been selected to be part of the mating pool
+            console.log(`species size = ${this.species[i].genomes.length}, matingpoolSize = ${this.species[i].genomes.length * survivalThreshold}, offspring = ${offspring}`);
+            let speciesSelection = roulette(this.species[i].genomes, this.species[i].genomes.length * survivalThreshold);
         }
 
 
-        for (let i = 0; i < this.genomes.length; i++) {
-            if (Math.random() < no_cross) {
-                mutaters.push(this.genomes[i]);
-            } else {
-                parents.push(this.genomes[i]);
-            }//assigns the genomes to either the mating pool or the mutation pool
-        }
+        // for (let i = 0; i < this.genomes.length; i++) {
+        //     if (Math.random() < no_cross) {
+        //         mutaters.push(this.genomes[i]);
+        //     } else {
+        //         parents.push(this.genomes[i]);
+        //     }//assigns the genomes to either the mating pool or the mutation pool
+        // }
     }
 }
