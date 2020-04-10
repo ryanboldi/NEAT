@@ -6,6 +6,8 @@ class Genome {
         this.nodes = [] //array of nodes
         this.connections = [] // array of connections between those nodes
 
+        this.fitness = Math.random() * 500;//REMOVE THIS BEFORE. JUST FOR TESTING
+
         for (let i = 0; i < inputs; i++) {
             this.nodes.push(new Node(i, 'i'))
         }
@@ -221,10 +223,23 @@ class Genome {
                     this.connections[i].weight = (Math.random() * 2) - 1;
                 }
             }
-            if (Math.random() < mut_toggle_enable_prob){
+            if (Math.random() < mut_toggle_enable_prob) {
                 this.connections[i].toggle();
             }
         }
+    }
+
+    //return a copy of this genome
+    copy() {
+        let clone = new Genome(this.inputs, this.outputs, true);
+
+        for (let i = 0; i < this.nodes.length; i++) {
+            clone.nodes.push(this.nodes[i].clone());
+        }
+        for (let i = 0; i < this.connections.length; i++) {
+            clone.connections.push(this.connections[i].clone());
+        }
+        return clone;
     }
 
     Draw() {
