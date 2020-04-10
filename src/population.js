@@ -47,36 +47,100 @@ class Population {
     makeNext() {
         //FITNESS SHARING Offspring = (AverageSpeciesFitness / Total_of_AverageSpeciesFitnesss) * PopulationSize
         let newPop = []
-        let mutaters = []; //genomes to be mutated but not crossed over
-        let parents = []; //genomes to be crossed over and then mutated
 
         this.speciate();
-        this.interspecies = []; //genomes that have been selected to mate with other species. they will be inserted into a random species' mating pool
+        let interspecies = []; //genomes that have been selected to mate with other species. they will be inserted into a random species' mating pool
 
         let tot_avg_fitness = 0;
         for (let i = 0; i < this.species.length; i++) {
             tot_avg_fitness += this.species[i].getAveFit();
         }
 
-        console.log(this.species);
+        //console.log(this.species);
 
         for (let i = 0; i < this.species.length; i++) {
-            let offspring = ((this.species[i].averageFitness / tot_avg_fitness) * population); //how many offspring this species is allowed. 
-            let matingPool = [];//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
+            let offspring = Math.round((this.species[i].averageFitness / tot_avg_fitness) * population); //how many offspring this species is allowed. 
+            let matingPool;//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
 
             //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
             //which creatures have been selected to be part of the mating pool
-            console.log(`species size = ${this.species[i].genomes.length}, matingpoolSize = ${this.species[i].genomes.length * survivalThreshold}, offspring = ${offspring}`);
-            let speciesSelection = roulette(this.species[i].genomes, this.species[i].genomes.length * survivalThreshold);
+            //console.log(`species size = ${this.species[i].genomes.length}, matingpoolSize = ${this.species[i].genomes.length * survivalThreshold}, offspring = ${offspring}`);
+            matingPool = roulette(this.species[i].genomes, this.species[i].genomes.length * survivalThreshold);
+
+            //get rid of the dudes that wanna mate outside of thier species.
+            for (let j = 0; j < matingPool.length; j++) {
+                if (Math.random() < interspecies_mate_rate) {
+                    interspecies.push(matingPool[j]);
+                    //remove from this species' mating pool
+                    matingPool.splice(j, 1);
+                }
+            }
+
+            //use mating pool to create offspring------------------------
+
+            let mutaters = []; //genomes to be mutated but not crossed over
+            let parents = []; //genomes to be crossed over and then mutated
+
+            //assigns the genomes to either the mating pool or the mutation pool
+            for (let i = 0; i < matingPool.length; i++) {
+                if (Math.random() < no_cross) {
+                    mutaters.push(matingPool[i]);
+                } else {
+                    parents.push(matingPool[i]);
+                }
+            }
+
+            //mutators should get {(mutaters.length/matingpool.length) * offspring} children 
+            let mutChildren = Math.round((mutaters.length / matingPool.length) * offspring);
+            let crossChildren = Math.round((parents.length / matingPool.length) * offspring);
+            //check that rounding hasnt removed an offspring (if 1.5 and 1.5 rounding would take total it to 4);
+            if (mutChildren + crossChildren > offspring) {
+                if (Math.random() < no_cross) {
+                    crossChildren -= 1;
+                } else {
+                    mutChildren -= 1;
+                }
+            }
+
+            //children made via mutation only
+            let muts = [];
+            //children made via crossing
+            let crosses = [];
+            while (muts.length < mutChildren) {
+                //make new child via mutation and add it to muts
+                //choose random parent
+                let parent = mutaters[Math.floor(Math.random() * mutaters.length)]//random from mutators
+                let child = parent.clone();
+                child.Mutate();
+                muts.push(child);
+            }
+            //console.log(muts);
+            muts.forEach(m => {
+                newPop.push(m);
+            });
+
+            while (crosses.length < crossChildren) {
+                //make new child via crossover
+                //chose two parents
+                let parent1 = parents[Math.floor(Math.random() * parents.length)];
+                let parent2 = parents[Math.floor(Math.random() * parents.length)];
+                let child;
+
+                if (parent1.fitness >= parent2.fitness) {
+                    child = crossover(parent1, parent2);
+                } else {
+                    child = crossover(parent2, parent1);
+                }
+
+                child.Mutate();
+                crosses.push(child);
+            }
+            //console.log(crosses);
+            crosses.forEach(c => {
+                newPop.push(c);
+            });
         }
-
-
-        // for (let i = 0; i < this.genomes.length; i++) {
-        //     if (Math.random() < no_cross) {
-        //         mutaters.push(this.genomes[i]);
-        //     } else {
-        //         parents.push(this.genomes[i]);
-        //     }//assigns the genomes to either the mating pool or the mutation pool
-        // }
+        console.log(newPop);
+        return newPop;
     }
 }
