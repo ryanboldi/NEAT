@@ -35,7 +35,7 @@ class Species {
         return (this.getDist(genome) <= distance_threshold);
     }
 
-    averageFitness() {
+    getAveFit() {
         let totFit = 0;
         this.genomes.forEach(g => {
             totFit += g.fitness
