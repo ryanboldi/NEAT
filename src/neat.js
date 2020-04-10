@@ -21,7 +21,7 @@ node_add_rate = 0.03;
 connec_add_rate = 0.05;
 large_pop_connec_rate = 0.3; // if populations are very big, then we can tolerate a larger number of prospective species and greater topological diversity.
 
-survivalThreshold = 0.2;// top 0.2% of population survive
+survivalThreshold = 0.2;// top 20% of population survive
 
 //GA variables
 population = 150;
@@ -232,12 +232,50 @@ function distance(genome1, genome2) {
  * @param {Number} toSelect number of genomes to be selected genomes.length * survival rate. If less than 1, will be converted to probability, else floored
  */
 function roulette(genomes, toSelect) {
-    let sortedGenomes = []//TODO
-    
-    if (toSelect < 1) {
-        //if species has less than a certain amount of people, we want to select only one
-        if (Math.random() < toSelect * genomes.length) {
-            //return most fit dude
+    let left = genomes;
+    let selected = [];
+
+    while (toSelect > 0) {
+        //console.log(`toSelect: ${toSelect}`);
+        //assign probs based on fitness
+        let probs = []; //prob we select each one of of the genomes.
+        let tot = 0; //total fitness totaller
+        for (let i = 0; i < left.length; i++) {
+            tot += left[i].fitness;
+        }
+
+        //assign probs based on fitness vs tot.fitness
+        for (let i = 0; i < left.length; i++) {
+            probs.push(left[i].fitness / tot);
+        }
+
+        let rand = Math.random();
+        let other = 0;
+
+        //console.log(`LEFT ${left.length}`);
+        //select new dude based on fitness
+        for (let i = 0; i < left.length; i++) {
+            if (rand > other && rand < probs[i]) {
+                selected.push(left[i]);
+                //console.log(`ADDED ${left[i]}`);
+                left.splice(i, 1);//removes the genome from the ones that are left in mating pool
+                toSelect -= 1; //we selected one , so we have toselect-1 left to selects
+                break;
+            } else {
+                other = probs[i]; //move to next unit
+            }
+        }
+
+
+        if (toSelect < 1 && toSelect > 0) {
+            //if species has less than a certain amount of people, we want to select only one with a toselect probability
+            //select one dude
+            if (toSelect > Math.random()) {
+                toSelect = 1;
+            } else {
+                toSelect = 0;
+            }
         }
     }
+    return selected;
 }
