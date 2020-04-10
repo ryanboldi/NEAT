@@ -63,7 +63,10 @@ function doGen() {
 
 
 //first parent must have higher fitness than second parent
-function crossover(parent1, parent2) {
+function crossover(p1, p2) {
+    let parent1 = p1.clone();//just incase
+    let parent2 = p2.clone();
+
     //iterate over every gene, if there is a matching gene between genome 1 and 2, then we chose one at random
     //if that gene is disjoint (in one but not the other) we select it from the more fit parent
     //if gene is excess, we select from more fit parent
@@ -109,15 +112,21 @@ function crossover(parent1, parent2) {
             if (p1Genes[i] !== 0 && p2Genes[i] !== 0) {
                 ///matching gene exists, chose random gene and append to child. 
                 if (Math.random() > 0.5) {
-                    child.connections.push(p1Genes[i].enable())
+                    let temp = p1Genes[i];
+                    temp.enable();
+                    child.connections.push(temp);
                 } else {
-                    child.connections.push(p2Genes[i].enable())
+                    let temp = p2Genes[i];
+                    temp.enable();
+                    child.connections.push(temp);
                 }
             }
             else if (p1Genes[i] !== 0 && p2Genes[i] == 0) {
                 //p1 has gene that p2 doesnt,
                 //add it to child
-                child.connections.push(p1Genes[i].enable())
+                let temp = p1Genes[i];
+                temp.enable();
+                child.connections.push(temp);
             }
             else if (p1Genes[i] == 0 && p2Genes[i] !== 0) {
                 //p2 has gene that p1 doesn't 
