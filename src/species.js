@@ -40,7 +40,18 @@ class Species {
         this.genomes.forEach(g => {
             totFit += g.fitness
         });
-        this.averageFitness = totFit/(this.genomes.length);
+        this.averageFitness = totFit / (this.genomes.length);
         return this.averageFitness;
+    }
+    getBestFit() {
+        let max = 0;
+        this.genomes.forEach(g => {
+            if (g.fitness > max) {
+                max = g.fitness;
+                champ = g;
+            };
+        });
+        this.bestFitness = max;
+        return this.bestFitness;
     }
 }
