@@ -71,7 +71,7 @@ function crossover(p1, p2) {
     //if that gene is disjoint (in one but not the other) we select it from the more fit parent
     //if gene is excess, we select from more fit parent
     let child = new Genome(parent1.inputs, parent1.outputs, true); //empty child
-    console.log(child);
+    //console.log(child);
     //find biggest innov_number
     let big = 0;
     for (let i = 0; i < parent1.connections.length; i++) {
@@ -99,7 +99,7 @@ function crossover(p1, p2) {
             if (parent2.connections[j].innov_number == i) { p2Genes[i - 1] = parent2.connections[j]; }
         }
     }
-    console.log(p1Genes, p2Genes);
+    //console.log(p1Genes, p2Genes);
 
     //go through fitter parent's genes, if there is no matching gene for p2, just assign the child p1's gene
     // if p2 has a matching gene, then 50% chance to select it
