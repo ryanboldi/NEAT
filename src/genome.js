@@ -230,7 +230,7 @@ class Genome {
     }
 
     //return a copy of this genome
-    copy() {
+    clone() {
         let clone = new Genome(this.inputs, this.outputs, true);
 
         for (let i = 0; i < this.nodes.length; i++) {
