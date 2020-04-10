@@ -27,4 +27,8 @@ class Connection {
             this.enabled = false;
         } else this.enabled = true;
     }
+
+    clone() {
+        return new Connection(this.in_node, this.out_node, false, this.weight, this.enabled, this.innov_number);
+    }
 }
