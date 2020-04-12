@@ -140,7 +140,7 @@ class Population {
                 newPop.push(c);
             });
         }
-        console.log(newPop);
-        return newPop;
+        //console.log(newPop);
+        return new Population(newPop);
     }
 }
