@@ -48,7 +48,7 @@ class Species {
         this.genomes.forEach(g => {
             if (g.fitness > max) {
                 max = g.fitness;
-                champ = g;
+                this.champ = g;
             };
         });
         this.bestFitness = max;
