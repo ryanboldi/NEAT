@@ -233,7 +233,7 @@ class Genome {
     clone() {
         let clone = new Genome(this.inputs, this.outputs, true);
 
-        for (let i = 0; i < this.nodes.length; i++) {
+        for (let i = 0; i < this.nodes.length - (this.inputs + this.outputs + 1); i++) {
             clone.nodes.push(this.nodes[i].clone());
         }
         for (let i = 0; i < this.connections.length; i++) {
