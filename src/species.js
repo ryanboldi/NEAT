@@ -9,6 +9,7 @@ class Species {
         this.representative;
         this.bestFitness = 0;
         this.averageFitness = 0;
+        this.matingPool;
 
         //if g given
         if (g) {

@@ -16,6 +16,11 @@ class Population {
             console.error("error in population instantiation: genomes not instance of array");
         }
         this.species = []
+
+
+        this.bestFitness = 0;
+        this.bestCreature;
+        this.averageFitness = 0;
     }
 
     /**speciates the entire population's genomes and stores them in the population's species */
@@ -43,29 +48,46 @@ class Population {
         //console.log(this.species);
     }
 
+    //assigns every genomes .fitness value to thef itness function
+    fitness() {
+        let tot = 0;
+        for (let i = 0; i < this.genomes.length; i++) {
+            this.genomes[i].fitness = getFitXOR(this.genomes[i]);
+            tot += this.genomes[i].fitness
+            if (getFitXOR(this.genomes[i]) > this.bestFitness) {
+                this.bestFitness = getFitXOR(this.genomes[i]);
+                this.bestCreature = this.genomes[i];
+            }
+        }
+        this.averageFitness = (tot/this.genomes.length);
+    }
+
     //makes next generation's population based on fitness
     makeNext() {
-        //FITNESS SHARING Offspring = (AverageSpeciesFitness / Total_of_AverageSpeciesFitnesss) * PopulationSize
-        let newPop = []
-
         this.speciate();
+        this.fitness();
+        //console.log(`fitness : ${this.genomes[0].fitness}`);
+        //FITNESS SHARING Offspring = (AverageSpeciesFitness / Total_of_AverageSpeciesFitnesss) * PopulationSize
+        let newPop = [];
         let interspecies = []; //genomes that have been selected to mate with other species. they will be inserted into a random species' mating pool
 
         let tot_avg_fitness = 0;
         for (let i = 0; i < this.species.length; i++) {
             tot_avg_fitness += this.species[i].getAveFit();
+            this.species[i].getBestFit();
         }
 
         //console.log(this.species);
 
         for (let i = 0; i < this.species.length; i++) {
-            let offspring = Math.round((this.species[i].averageFitness / tot_avg_fitness) * population); //how many offspring this species is allowed. 
             let matingPool;//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
-
+            newPop.push(this.species[i].champ)
             //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
             //which creatures have been selected to be part of the mating pool
             //console.log(`species size = ${this.species[i].genomes.length}, matingpoolSize = ${this.species[i].genomes.length * survivalThreshold}, offspring = ${offspring}`);
+           // console.log(this.species[i].genomes);
             matingPool = roulette(this.species[i].genomes, this.species[i].genomes.length * survivalThreshold);
+            //console.log(matingPool);
 
             //get rid of the dudes that wanna mate outside of thier species.
             for (let j = 0; j < matingPool.length; j++) {
@@ -75,8 +97,28 @@ class Population {
                     matingPool.splice(j, 1);
                 }
             }
+            this.species[i].matingPool = matingPool;
+        }
 
+        let pools = [];//array of species that the interspecies will go to respectivly
+
+        for (let i = 0; i < interspecies.length; i++) {
+            pools.push(Math.floor(Math.random() * this.species.length))
+        };
+
+        //console.log(interspecies);
+
+        for (let i = 0; i < this.species.length; i++) {
+            let offspring = Math.round((this.species[i].averageFitness / tot_avg_fitness) * (population - interspecies.length - this.species.length)); //how many offspring this species is allowed. 
             //use mating pool to create offspring------------------------
+            let matingPool = this.species[i].matingPool;
+
+            for (let j = 0; j < pools.length; j++) {
+                if (pools[j] == i) {
+                    //add to mating pool
+                    matingPool.push(interspecies[j])
+                }
+            }
 
             let mutaters = []; //genomes to be mutated but not crossed over
             let parents = []; //genomes to be crossed over and then mutated
@@ -128,8 +170,10 @@ class Population {
 
                 if (parent1.fitness >= parent2.fitness) {
                     child = crossover(parent1, parent2);
+                    //console.log(parent1, parent2, child);
                 } else {
                     child = crossover(parent2, parent1);
+                    //console.log(parent1, parent2, child);
                 }
 
                 child.Mutate();
@@ -139,7 +183,13 @@ class Population {
             crosses.forEach(c => {
                 newPop.push(c);
             });
+
+            //children made via mutation only
+            //console.log(muts);
+            //children made via crossing
+            //console.log(crosses);
         }
+
         //console.log(newPop);
         return new Population(newPop);
     }

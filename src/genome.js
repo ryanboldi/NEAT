@@ -6,7 +6,7 @@ class Genome {
         this.nodes = [] //array of nodes
         this.connections = [] // array of connections between those nodes
 
-        this.fitness = Math.random() * 500;//REMOVE THIS BEFORE. JUST FOR TESTING
+        this.fitness = 0; //= Math.random() * 500;//REMOVE THIS BEFORE. JUST FOR TESTING
 
         for (let i = 0; i < inputs; i++) {
             this.nodes.push(new Node(i, 'i'))
@@ -233,12 +233,14 @@ class Genome {
     clone() {
         let clone = new Genome(this.inputs, this.outputs, true);
 
-        for (let i = 0; i < this.nodes.length - (this.inputs + this.outputs + 1); i++) {
+        for (let i = this.inputs + this.outputs + 1; i < this.nodes.length; i++) {
             clone.nodes.push(this.nodes[i].clone());
         }
         for (let i = 0; i < this.connections.length; i++) {
             clone.connections.push(this.connections[i].clone());
         }
+
+        clone.fitness = this.fitness;
         return clone;
     }
 

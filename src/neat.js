@@ -1,13 +1,13 @@
 //GLOBAL VARIABLES
-glob_innov = 1
-innovations = []//array of historyconnections to store the innovations of this current generation
+glob_innov = 1;
+innovations = [];//array of historyconnections to store the innovations of this current generation
 
 //species variables
 excess_coefficient = 1; //how important each of these things are in defining a new specie
 disjoint_coefficient = 1;
 weight_coefficient = 0.4;
-distance_threshold = 3;
-N_cutoff = 20; //how big a genome has to be so that we normalise it's excess and disjoint coefficients; if smaller, noramlisation is dividing by 1.
+distance_threshold = 1;
+N_cutoff = 1; //how big a genome has to be so that we normalise it's excess and disjoint coefficients; if smaller, noramlisation is dividing by 1.
 
 not_improve_cutoff = 15; // if the max fitness of the species doesnt increase in this man generations, the networks will not be allowed to reproduce
 //champion of each species with more than five networks was copied into next generation unchanged
@@ -15,16 +15,16 @@ weight_mut_rate = 0.8;
 mut_toggle_enable_prob = 0.05;
 uniform_perturbance = 0.9; // if weights mutated, 90% chance they are uniformly perturbed. 10% they are assigned new random value
 disable_inherited_disabled_gene = 0.75;
-no_cross = 0.25; //proportion of population to not cross over
-interspecies_mate_rate = 0.001;
-node_add_rate = 0.03;
+no_cross = 0.1;//0.25 //proportion of population to not cross over
+interspecies_mate_rate = 0.001;//0.001
+node_add_rate = 0.03;//0.03
 connec_add_rate = 0.05;
 large_pop_connec_rate = 0.3; // if populations are very big, then we can tolerate a larger number of prospective species and greater topological diversity.
 
-survivalThreshold = 0.2;// top 20% of population survive
+survivalThreshold = 0.5;// top 20% of population survive
 
 //GA variables
-population = 150;
+population = 100;
 
 //NEAT Variables
 someInputsDisc = true; // Whether or not to start with some inputs disconnected 
@@ -37,7 +37,7 @@ someInputsDisc = true; // Whether or not to start with some inputs disconnected
 tanh = (x) => { return Math.tanh(x) };
 
 // normalised and shifted modified sigmoidal transfer function <- steepedned sigmoid that allows more fine tuning at extreme activations
-sigmoid = (x) => { return ((1 / (1 + (Math.E ** -(4.9) * x))) * 2) - 1 };
+sigmoid = (x) => { return ((1 / (1 + (Math.E ** (-(4.9) * x)))) * 2) - 1 };
 
 //step function
 step = (x) => {
@@ -45,6 +45,8 @@ step = (x) => {
     if (x > 0) return 1;
     if (x == 0) return 0;
 };
+
+none = (x) => { return x };
 
 function normalise(val, minVal, maxVal, newMin, newMax) {
     return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
@@ -241,7 +243,11 @@ function distance(genome1, genome2) {
  * @param {Number} toSelect number of genomes to be selected genomes.length * survival rate. If less than 1, will be converted to probability, else floored
  */
 function roulette(genomes, toSelect) {
-    let left = genomes;
+    let left = [];
+    for (let i = 0; i < genomes.length; i++) {
+        left.push(genomes[i].clone());
+        //console.log(left);
+    }
     let selected = [];
 
     while (toSelect > 0) {
@@ -255,9 +261,10 @@ function roulette(genomes, toSelect) {
 
         //assign probs based on fitness vs tot.fitness
         for (let i = 0; i < left.length; i++) {
-            probs.push(left[i].fitness / tot);
+            probs.push((left[i].fitness / tot));
         }
 
+        //console.log(probs);
         let rand = Math.random();
         let other = 0;
 
