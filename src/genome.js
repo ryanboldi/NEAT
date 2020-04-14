@@ -219,8 +219,8 @@ class Genome {
                     this.connections[i].weight += ((Math.random() < 0.5) ? (-0.1 * this.connections[i].weight) : (0.1 * this.connections[i].weight));
                 }
                 else {
-                    //new random weight
-                    this.connections[i].weight = (Math.random() * 2) - 1;
+                    //new random weight between -2 and 2
+                    this.connections[i].weight = (Math.random() * 4) - 2;
                 }
             }
             if (Math.random() < mut_toggle_enable_prob) {
@@ -246,7 +246,7 @@ class Genome {
 
     Draw() {
         //TODO -> DEAL WITH RECCURENT SOMEHOW
-        //TODO -> FIX GLITCHINESS WHEN THERES LARG NUMBERS OF NODES
+        //TODO -> FIX GLITCHINESS WHEN THERES LARGE NUMBERS OF NODES
         background(255);
 
         let weightStrength = 4; //how much weight changes the thickness of the lines
