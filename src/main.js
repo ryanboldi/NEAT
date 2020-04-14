@@ -16,7 +16,7 @@ function setup() {
     for (let i = 0; i < 800; i++) {
         p = p.makeNext();
         p.fitness();
-        if (p.bestFitness > 3.99) {
+        if (p.bestFitness > 3.999) {
             console.log(`DONE in ${i} generations`);
             break;
         }
@@ -26,7 +26,7 @@ function setup() {
     p.fitness();
     getOutputs(p.bestCreature);
     console.log(p);
-    
+
 
     // let genomes = [new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1)];
     // pop = new Population(genomes);
@@ -52,7 +52,7 @@ function getFitXOR(genome) {
     let zo = genome.feedforward([0, 1]);//1
     let oo = genome.feedforward([1, 1]);//0
 
-    return (4 - (Math.abs(zz - 0) + Math.abs(oz - 1) + Math.abs(zo - 1) + Math.abs(oo - 0)));
+    return (4 - (Math.abs(zz - 0) + Math.abs(oz - 1) + Math.abs(zo - 1) + Math.abs(oo - 0))) - ((genome.connections.length + genome.nodes.length) * 0.001);
 }
 
 function getOutputs(genome) {
