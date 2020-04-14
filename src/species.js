@@ -15,8 +15,8 @@ class Species {
         if (g) {
             this.genomes = [];
             this.genomes.push(g);
-            this.champ = g;
-            this.representative = g; // = g.copy
+            this.champ = g.clone();
+            this.representative = g.clone(); // = g.copy
             this.bestFitness = g.fitness;
         }
     }

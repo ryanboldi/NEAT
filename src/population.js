@@ -81,7 +81,7 @@ class Population {
 
         for (let i = 0; i < this.species.length; i++) {
             let matingPool;//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
-            newPop.push(this.species[i].champ)
+            newPop.push(this.species[i].champ.clone())
             //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
             //which creatures have been selected to be part of the mating pool
             //console.log(`species size = ${this.species[i].genomes.length}, matingpoolSize = ${this.species[i].genomes.length * survivalThreshold}, offspring = ${offspring}`);
