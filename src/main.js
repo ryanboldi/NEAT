@@ -16,17 +16,17 @@ function setup() {
     for (let i = 0; i < 800; i++) {
         p = p.makeNext();
         p.fitness();
-        if (p.bestFitness > 3.9) {
+        if (p.bestFitness > 3.99) {
             console.log(`DONE in ${i} generations`);
             break;
         }
         console.log(p.averageFitness)
         innovations = [];
     }
-
+    p.fitness();
     getOutputs(p.bestCreature);
     console.log(p);
-
+    
 
     // let genomes = [new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1)];
     // pop = new Population(genomes);
@@ -61,8 +61,8 @@ function getOutputs(genome) {
     let zo = genome.feedforward([0, 1]);//1
     let oo = genome.feedforward([1, 1]);//0
 
-    console.log(`[0, 0] ->${zz}`);
-    console.log(`[1, 0] ->${oz}`);
-    console.log(`[0, 1] ->${zo}`);
-    console.log(`[1, 1] ->${oo}`);
+    console.log(`[0, 0] -> ${zz}`);
+    console.log(`[1, 0] -> ${oz}`);
+    console.log(`[0, 1] -> ${zo}`);
+    console.log(`[1, 1] -> ${oo}`);
 }
