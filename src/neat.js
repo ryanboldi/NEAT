@@ -6,7 +6,7 @@ innovations = [];//array of historyconnections to store the innovations of this 
 excess_coefficient = 1; //how important each of these things are in defining a new specie
 disjoint_coefficient = 1;
 weight_coefficient = 0.4;
-distance_threshold = 1;
+distance_threshold = 2;
 N_cutoff = 1; //how big a genome has to be so that we normalise it's excess and disjoint coefficients; if smaller, noramlisation is dividing by 1.
 
 not_improve_cutoff = 15; // if the max fitness of the species doesnt increase in this man generations, the networks will not be allowed to reproduce
@@ -15,7 +15,7 @@ weight_mut_rate = 0.8;
 mut_toggle_enable_prob = 0.05;
 uniform_perturbance = 0.9; // if weights mutated, 90% chance they are uniformly perturbed. 10% they are assigned new random value
 disable_inherited_disabled_gene = 0.75;
-no_cross = 0.1;//0.25 //proportion of population to not cross over
+no_cross = 0.25;//0.25 //proportion of population to not cross over
 interspecies_mate_rate = 0.001;//0.001
 node_add_rate = 0.03;//0.03
 connec_add_rate = 0.05;
@@ -24,7 +24,7 @@ large_pop_connec_rate = 0.3; // if populations are very big, then we can tolerat
 survivalThreshold = 0.5;// top 20% of population survive
 
 //GA variables
-population = 100;
+population = 150;
 
 //NEAT Variables
 someInputsDisc = true; // Whether or not to start with some inputs disconnected 
@@ -37,7 +37,7 @@ someInputsDisc = true; // Whether or not to start with some inputs disconnected
 tanh = (x) => { return Math.tanh(x) };
 
 // normalised and shifted modified sigmoidal transfer function <- steepedned sigmoid that allows more fine tuning at extreme activations
-sigmoid = (x) => { return ((1 / (1 + (Math.E ** (-(4.9) * x)))) * 2) - 1 };
+sigmoid = (x) => { return 1 / (1 + (Math.E ** (-(4.9) * x)))};
 
 //step function
 step = (x) => {
