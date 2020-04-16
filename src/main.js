@@ -16,23 +16,17 @@ function setup() {
     for (let i = 0; i < 800; i++) {
         p = p.makeNext();
         p.fitness();
-        if (p.bestFitness > 3.999) {
+        if (p.bestFitness > 3.8) {
             console.log(`DONE in ${i} generations`);
             break;
         }
-        console.log(p.averageFitness)
+        console.log(p.averageFitness);
+        console.log(p.genomes.length);
         innovations = [];
     }
     p.fitness();
     getOutputs(p.bestCreature);
     console.log(p);
-
-
-    // let genomes = [new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1), new Genome(2,1)];
-    // pop = new Population(genomes);
-    // pop.fitness();
-    // console.log(pop);
-    // console.log(roulette(pop.genomes, 3))
 }
 
 function draw() {

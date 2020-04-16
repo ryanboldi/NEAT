@@ -1,6 +1,7 @@
 //GLOBAL VARIABLES
 glob_innov = 1;
 innovations = [];//array of historyconnections to store the innovations of this current generation
+generation = 1;
 
 //species variables
 excess_coefficient = 1; //how important each of these things are in defining a new specie
@@ -9,7 +10,7 @@ weight_coefficient = 0.4;
 distance_threshold = 2;
 N_cutoff = 1; //how big a genome has to be so that we normalise it's excess and disjoint coefficients; if smaller, noramlisation is dividing by 1.
 
-not_improve_cutoff = 15; // if the max fitness of the species doesnt increase in this man generations, the networks will not be allowed to reproduce
+not_improve_cutoff = 15; // if the max fitness of the species doesnt increase in this many generations, the networks will not be allowed to reproduce
 //champion of each species with more than five networks was copied into next generation unchanged
 weight_mut_rate = 0.8;
 mut_toggle_enable_prob = 0.05;

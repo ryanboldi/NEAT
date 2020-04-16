@@ -10,6 +10,7 @@ class Species {
         this.bestFitness = 0;
         this.averageFitness = 0;
         this.matingPool;
+        this.last_improved; //generation that this species last improved in.
 
         //if g given
         if (g) {
@@ -44,12 +45,14 @@ class Species {
         this.averageFitness = totFit / (this.genomes.length);
         return this.averageFitness;
     }
+    
     getBestFit() {
         let max = 0;
         this.genomes.forEach(g => {
             if (g.fitness > max) {
                 max = g.fitness;
                 this.champ = g;
+                this.last_improved = generation;
             };
         });
         this.bestFitness = max;

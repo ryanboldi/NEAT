@@ -59,7 +59,7 @@ class Population {
                 this.bestCreature = this.genomes[i];
             }
         }
-        this.averageFitness = (tot/this.genomes.length);
+        this.averageFitness = (tot / this.genomes.length);
     }
 
     //makes next generation's population based on fitness
@@ -80,12 +80,25 @@ class Population {
         //console.log(this.species);
 
         for (let i = 0; i < this.species.length; i++) {
+            //IF THE SPEICES HASN'T IMPROVED IN 15 GENERATIONS, IT WON'T BE ALLOWED TO REPRODUCE
+            let denied = ((this.species.last_improved + not_improve_cutoff) > generation);
+
+            if (denied) {
+                break;
+                //SKIP THIS SPECIES 
+            }
+
             let matingPool;//pool of parents to mate from (25% wont be mated but purly mutated and put into the next generation)
-            newPop.push(this.species[i].champ.clone())
+            
+            if (this.species[i].genomes.length > 4) {
+                //if species has atleast 5 creatures, the champion will automatically be put into the next generation
+                newPop.push(this.species[i].champ.clone());
+            }
+
             //use fitness proportionate selection to select 20% of the species to be put into the mating pool. 
             //which creatures have been selected to be part of the mating pool
             //console.log(`species size = ${this.species[i].genomes.length}, matingpoolSize = ${this.species[i].genomes.length * survivalThreshold}, offspring = ${offspring}`);
-           // console.log(this.species[i].genomes);
+            // console.log(this.species[i].genomes);
             matingPool = roulette(this.species[i].genomes, this.species[i].genomes.length * survivalThreshold);
             //console.log(matingPool);
 
@@ -109,6 +122,14 @@ class Population {
         //console.log(interspecies);
 
         for (let i = 0; i < this.species.length; i++) {
+            //IF THE SPEICES HASN'T IMPROVED IN 15 GENERATIONS, IT WON'T BE ALLOWED TO REPRODUCE
+            let denied = ((this.species.last_improved + not_improve_cutoff) > generation);
+
+            if (denied) {
+                break;
+                //SKIP THIS SPECIES 
+            }
+
             let offspring = Math.round((this.species[i].averageFitness / tot_avg_fitness) * (population - interspecies.length - this.species.length)); //how many offspring this species is allowed. 
             //use mating pool to create offspring------------------------
             let matingPool = this.species[i].matingPool;
