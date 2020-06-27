@@ -46,7 +46,7 @@ function getFitXOR(genome) {
     let zo = genome.feedforward([0, 1]);//1
     let oo = genome.feedforward([1, 1]);//0
 
-    return (4 - (Math.abs(zz - 0) + Math.abs(oz - 1) + Math.abs(zo - 1) + Math.abs(oo - 0))) - ((genome.connections.length + genome.nodes.length) * 0.001);
+    return (4 - (Math.abs(zz - 0) + Math.abs(oz - 1) + Math.abs(zo - 1) + Math.abs(oo - 0)));
 }
 
 function getOutputs(genome) {
