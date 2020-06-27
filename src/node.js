@@ -29,7 +29,8 @@ class Node {
     }
 
     clone() {
-        let clone = new Node(this.num, this.type);
+        //let clone = new Node(this.num, this.type);
+        let clone = _.cloneDeep(this)
         return clone;
     }
 }

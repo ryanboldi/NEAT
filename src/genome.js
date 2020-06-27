@@ -231,16 +231,17 @@ class Genome {
 
     //return a copy of this genome
     clone() {
-        let clone = new Genome(this.inputs, this.outputs, true);
+        //let clone = new Genome(this.inputs, this.outputs, true);
 
-        for (let i = this.inputs + this.outputs + 1; i < this.nodes.length; i++) {
-            clone.nodes.push(this.nodes[i].clone());
-        }
-        for (let i = 0; i < this.connections.length; i++) {
-            clone.connections.push(this.connections[i].clone());
-        }
+        //for (let i = this.inputs + this.outputs + 1; i < this.nodes.length; i++) {
+         //   clone.nodes.push(this.nodes[i].clone());
+        //}
+        //for (let i = 0; i < this.connections.length; i++) {
+         //   clone.connections.push(this.connections[i].clone());
+       // }
 
-        clone.fitness = this.fitness;
+        //clone.fitness = this.fitness;
+        let clone = _.cloneDeep(this)
         return clone;
     }
 
